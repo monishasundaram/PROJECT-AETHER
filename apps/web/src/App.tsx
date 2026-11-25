@@ -1,7 +1,10 @@
+import { Workspace } from '@aether/three-engine'
 import { CameraPreview } from './components/CameraPreview'
 import { GesturePanel } from './components/GesturePanel'
+import { ObjectPanel } from './components/ObjectPanel'
 import { StatusPanel } from './components/StatusPanel'
 import { useHandTracking } from './hooks/useHandTracking'
+import { gestureBus } from './lib/gestureBus'
 
 export function App() {
   const t = useHandTracking()
@@ -10,11 +13,12 @@ export function App() {
     <div className="app">
       <header>
         <span className="brand">AETHER</span>
-        <span className="sub">Vision · Gestures · Phase 2</span>
+        <span className="sub">Workspace · Phase 3</span>
       </header>
       <main>
-        <CameraPreview videoRef={t.videoRef} canvasRef={t.canvasRef} cameraStatus={t.cameraStatus} />
+        <Workspace bus={gestureBus} />
         <div className="side">
+          <CameraPreview videoRef={t.videoRef} canvasRef={t.canvasRef} cameraStatus={t.cameraStatus} />
           <StatusPanel
             cameraStatus={t.cameraStatus}
             trackerStatus={t.trackerStatus}
@@ -27,6 +31,7 @@ export function App() {
             onStart={t.start}
             onStop={t.stop}
           />
+          <ObjectPanel />
           <GesturePanel
             gesture={t.gesture}
             events={t.events}

@@ -18,6 +18,7 @@ import {
 } from '@aether/gestures'
 import { downloadJson } from '../lib/download'
 import { drawHands } from '../lib/drawHands'
+import { gestureBus } from '../lib/gestureBus'
 
 const log = createLogger('tracking')
 const UI_UPDATE_MS = 200
@@ -84,6 +85,7 @@ export function useHandTracking() {
         try {
           const frame = tracker.detect(video, now)
           const g = engine.update(frame.hands, frame.timestamp)
+                    gestureBus.publish(g)
 
           if (recorder.isRecording) recorder.push(frame)
 
@@ -158,6 +160,8 @@ export function useHandTracking() {
     loopRef.current = null
     cameraRef.current?.stop()
     trackerRef.current?.reset()
+    // Emit end events (grab_end etc.) so the 3D scene doesn't keep a stuck grab.
+    gestureBus.publish(engine.update([], performance.now()))
     engine.reset()
     calibPhase.current = null
     pendingEvents.current = []
@@ -284,6 +288,7 @@ export function useHandTracking() {
 
   useEffect(
     () => () => {
+      gestureBus.clear()
       startId.current++
       loopRef.current?.stop()
       cameraRef.current?.stop()

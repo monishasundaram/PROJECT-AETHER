@@ -105,3 +105,34 @@ button:disabled, select:disabled { opacity: 0.4; cursor: not-allowed; }
 .field { display: grid; gap: 4px; margin-bottom: 10px; font-size: 12px; color: var(--muted); }
 .field input[type='range'] { width: 100%; accent-color: var(--cyan); }
 .panel .actions + .actions { margin-top: 8px; }
+
+main { grid-template-columns: minmax(0, 1fr) 340px; align-items: start; }
+
+.workspace {
+  position: relative;
+  height: calc(100vh - 110px);
+  min-height: 420px;
+  background: #07080a;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.workspace canvas { display: block; touch-action: none; }
+
+.side { max-height: calc(100vh - 110px); overflow-y: auto; padding-right: 4px; }
+.side .preview { max-height: none; flex-shrink: 0; }
+
+.hand-cursor {
+  position: absolute; width: 30px; height: 30px; border: 2px solid #64748b; border-radius: 50%;
+  transform: translate(-50%, -50%); pointer-events: none; opacity: 0;
+  transition: opacity 0.15s, border-color 0.1s, background 0.1s;
+}
+.hand-cursor[data-state='workspace'] { border-color: var(--cyan); }
+.hand-cursor[data-state='pinching'] { border-color: var(--warn); }
+.hand-cursor[data-state='grabbing'] { border-color: var(--ok); background: rgba(52, 211, 153, 0.25); }
+.hand-cursor[data-state='paused'] { border-color: var(--bad); }
+.hand-cursor[data-state='two_hand'] { border-color: #a78bfa; background: rgba(167, 139, 250, 0.25); }
+
+.objlist { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+button.obj.on { border-color: var(--cyan); color: var(--cyan); }
+.help { display: grid; gap: 3px; }
+.help > div { display: flex; justify-content: space-between; gap: 12px; }
